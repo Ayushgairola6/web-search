@@ -1,8 +1,7 @@
-# This minimal config enables JSON output and disables the most aggressive engines.
 use_default_settings: true
 
 server:
-  secret_key: "YOUR_UNIQUE_SECRET_KEY_CHANGE_ME" # Generate a random string
+  secret_key: "YOUR_UNIQUE_SECRET_KEY_CHANGE_ME"
   limiter: false
 
 search:
@@ -15,3 +14,15 @@ search:
     - google_videos
     - duckduckgo
     - brave
+    - startpage
+    - karmasearch
+    - ahmia
+    - torch
+    - radio_browser
+    - bing               # Bing also might block, remove if needed
+  enabled_engines:
+    - qwant
+    - mojeek
+    - stract            # still keep stract in SearXNG as fallback
+    - wikipedia
+    - yahoo              # try adding yahoo; it often works
