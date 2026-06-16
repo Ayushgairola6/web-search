@@ -2,11 +2,16 @@ FROM searxng/searxng:latest
 
 USER root
 
-# Install tini and python3-pip using Wolfi's apk
-RUN apk add --no-cache tini py3-pip
+# 1. Bootstrap pip using Python's built-in ensurepip module
+RUN python3 -m ensurepip --upgrade
 
-# Install rotating-proxy via pip
-RUN pip3 install rotating-proxy
+# 2. Use the new pip to install the rotating-proxy package
+RUN python3 -m pip install rotating-proxy
+
+# 3. Download tini (the init system) manually
+#    The image's entrypoint expects it at /sbin/tini
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /sbin/tini
+RUN chmod +x /sbin/tini
 
 # Copy your proxy list and settings
 COPY proxies.txt /etc/searxng/proxies.txt
