@@ -2,8 +2,8 @@ FROM searxng/searxng:latest
 
 USER root
 
-# Install rotating-proxy using uv (system‑wide)
-RUN uv pip install --system rotating-proxy
+# Install rotating-proxy using pip3 (already available in the Wolfi base)
+RUN pip3 install rotating-proxy
 
 # Copy your proxy list and settings
 COPY proxies.txt /etc/searxng/proxies.txt
