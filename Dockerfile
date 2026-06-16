@@ -2,21 +2,19 @@ FROM searxng/searxng:latest
 
 USER root
 
-# Install pip (if not present) and the rotating-proxy package
-RUN apt-get update && \
-    apt-get install -y python3-pip && \
-    pip3 install rotating-proxy && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# 使用 apk 代替 apt-get 安装 python3-pip (Alpine 中包名为 py3-pip)
+RUN apk add --no-cache py3-pip && \
+    pip3 install rotating-proxy
 
-# Copy your proxy list and configuration
+# 复制你的代理列表和配置文件
 COPY proxies.txt /etc/searxng/proxies.txt
 COPY settings.yml /etc/searxng/settings.yml
 
-# Copy and make the entrypoint executable
+# 复制并设置入口脚本的执行权限
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Switch back to the searxng user (security)
+# 切换回 searxng 用户 (安全考虑)
 USER searxng
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
