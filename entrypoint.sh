@@ -1,19 +1,15 @@
 #!/bin/sh
 
-# Check if rotating-proxy is available; if not, try to use the Python module directly
-if ! command -v rotating-proxy >/dev/null 2>&1; then
-    echo "rotating-proxy not found – trying to run as Python module"
-    exec python3 -m rotating_proxy --proxy-list /etc/searxng/proxies.txt --port 5566 &
-else
-    rotating-proxy --proxy-list /etc/searxng/proxies.txt --port 5566 &
-fi
+# Start the Python proxy rotator in the background
+python3 /usr/local/bin/proxy_rotator.py &
 
-# Wait for the proxy to bind
+# Wait a moment for the socket to bind
 sleep 3
 
-# Set environment variables
+# Tell SearXNG to use our local proxy
 export SEARXNG_PROXY="http://localhost:5566"
 export SEARXNG_BIND_ADDRESS="0.0.0.0:7860"
 
-# Execute the original entrypoint (now at /original-entrypoint.sh)
-exec /sbin/tini -- /original-entrypoint.sh
+# Now launch SearXNG. The official image's CMD is "/usr/local/searxng/dockerfiles/docker-entrypoint.sh"
+# but we can also just run the searxng command directly.
+exec /usr/local/searxng/dockerfiles/docker-entrypoint.sh
