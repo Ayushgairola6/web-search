@@ -2,19 +2,20 @@ FROM searxng/searxng:latest
 
 USER root
 
-# Bootstrap pip using Python's built-in ensurepip, then install rotating-proxy
-RUN python3 -m ensurepip --upgrade && \
-    python3 -m pip install rotating-proxy
+# Install tini and python3-pip using Wolfi's apk
+RUN apk add --no-cache tini py3-pip
 
-# Copy your proxy list and configuration
+# Install rotating-proxy via pip
+RUN pip3 install rotating-proxy
+
+# Copy your proxy list and settings
 COPY proxies.txt /etc/searxng/proxies.txt
 COPY settings.yml /etc/searxng/settings.yml
 
-# Entrypoint script
+# Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Switch back to the non‑root user
 USER searxng
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
