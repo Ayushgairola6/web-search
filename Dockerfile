@@ -1,19 +1,13 @@
-FROM searxng/searxng:2025.2.15-d4972f1c2
+FROM searxng / searxng: latest
 
-# Copy the proxy rotator script and your proxy list
-COPY proxy_rotator.py /usr/local/bin/proxy_rotator.py
-COPY proxies.txt /etc/searxng/proxies.txt
+COPY settings.yml / etc / searxng / settings.yml
 
-# Make the script executable
-RUN chmod +x /usr/local/bin/proxy_rotator.py
-
-# Copy your custom settings
-COPY settings.yml /etc/searxng/settings.yml
-
-# Custom entrypoint that starts the proxy rotator then launches SearXNG
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Add a proper health check for Render
+HEALTHCHECK--interval = 30s--timeout = 5s--retries = 3 \
+    CMD curl - f http://localhost:7860/healthz || exit 1
 
 EXPOSE 7860
 
-ENTRYPOINT ["/entrypoint.sh"]
+
+
+
