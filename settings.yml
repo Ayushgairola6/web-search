@@ -25,4 +25,4 @@ search:
     - mojeek
     - stract            # still keep stract in SearXNG as fallback
     - wikipedia
-    - yahoo              # try adding yahoo; it often works
+    - yahoo
