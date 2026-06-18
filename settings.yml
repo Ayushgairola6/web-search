@@ -3,6 +3,7 @@ use_default_settings: true
 server:
   secret_key: "YOUR_UNIQUE_SECRET_KEY_CHANGE_ME"
   limiter: false
+  bind_address: "0.0.0.0:7860"   # Force port 7860
 
 search:
   formats:
@@ -19,10 +20,10 @@ search:
     - ahmia
     - torch
     - radio_browser
-    - bing               # Bing also might block, remove if needed
+    - bing
   enabled_engines:
     - qwant
     - mojeek
-    - stract            # still keep stract in SearXNG as fallback
+    - stract
     - wikipedia
     - yahoo
